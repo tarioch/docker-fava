@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: HurricanKai/Publish-Docker-Github-Action@master
     - name: Publish Snapshot to Registry
-      if: !contains(github.ref, 'refs/tags/v')
+      if: "!contains(github.ref, 'refs/tags/v')"
       with:
         name: tarioch/fava
         snapshot: true
