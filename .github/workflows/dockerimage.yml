@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   release:
     types: [published]
 
@@ -12,23 +12,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Publish Snapshot to Registry
-      uses: HurricanKai/Publish-Docker-Github-Action@master
-      if: "!contains(github.ref, 'refs/tags/v')"
-      with:
-        name: tarioch/fava
-        snapshot: true
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Publish Release to Registry
-      uses: HurricanKai/Publish-Docker-Github-Action@master
-      if: contains(github.ref, 'refs/tags/v')
-      with:
-        name: tarioch/fava
-        tagging: true
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-
-
+      - uses: actions/checkout@master
+      - name: Publish Snapshot to Registry
+        uses: HurricanKai/Publish-Docker-Github-Action@master
+        if: "!contains(github.ref, 'refs/tags/v') && !contains(github.ref, 'refs/pull')"
+        with:
+          name: tarioch/fava
+          snapshot: true
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Publish Release to Registry
+        uses: HurricanKai/Publish-Docker-Github-Action@master
+        if: contains(github.ref, 'refs/tags/v')
+        with:
+          name: tarioch/fava
+          tagging: true
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
