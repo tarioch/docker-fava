@@ -1,3 +1,3 @@
 fava==1.14
-tariochbctools==0.5.1
+tariochbctools==0.6.0
 smart-importer==0.1
