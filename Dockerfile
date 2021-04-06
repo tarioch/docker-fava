@@ -1,4 +1,4 @@
-FROM python:3.8.6
+FROM python:3.9.4
 
 ENV BEANCOUNT_INPUT_FILE ""
 ENV FAVA_OPTIONS "-H 0.0.0.0 -p 5000"
