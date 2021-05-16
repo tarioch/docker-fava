@@ -1,3 +1,5 @@
+Flask<2.0.0
+Jinja2<3.0.0
 fava==1.18
 tariochbctools==0.16.1
 smart-importer==0.3
