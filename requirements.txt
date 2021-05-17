@@ -1,4 +1,4 @@
-Flask<2.0.0
+Flask<3.0.0
 Jinja2<3.0.0
 fava==1.18
 tariochbctools==0.17.0
