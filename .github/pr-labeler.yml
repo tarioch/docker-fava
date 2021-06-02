@@ -1,3 +1,3 @@
 feature: feature/*
 bugfix: bugfix/*
-chore: [chore/*, dependabot/*]
+chore: chore/*
