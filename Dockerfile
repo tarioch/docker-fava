@@ -4,7 +4,7 @@ ENV BEANCOUNT_INPUT_FILE ""
 ENV FAVA_OPTIONS "-H 0.0.0.0 -p 5000"
 
 RUN apt update\
-    && apt install -y ghostscript libgl1
+    && apt install -y ghostscript
 
 COPY requirements.txt .
 
