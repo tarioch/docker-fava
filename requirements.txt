@@ -3,4 +3,4 @@ tariochbctools==1.5.3
 smart-importer==1.1
 beancount-reds-plugins==0.4.0
 fava-dashboards @ git+https://github.com/andreasgerstmayr/fava-dashboards.git@main
-beanprice==2.0.0
+beanprice==2.1.0
