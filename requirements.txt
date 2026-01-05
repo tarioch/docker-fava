@@ -1,4 +1,4 @@
-fava==1.30.8
+fava==1.30.9
 tariochbctools==1.6.0
 smart-importer==1.2
 beancount-reds-plugins==0.4.0
