@@ -3,29 +3,87 @@ name: Docker Image CI
 on:
   push:
     branches: [master]
+    tags: ["v*"]
   pull_request:
-    branches: [master]
-  release:
-    types: [published]
+
+# a newer push to a pull request replaces the running checks, publishing is never interrupted
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@main
-      - name: Publish Snapshot to Registry
-        uses: elgohr/Publish-Docker-Github-Action@v5
-        if: "!contains(github.ref, 'refs/tags/v') && !contains(github.ref, 'refs/pull')"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          name: tarioch/fava
-          snapshot: true
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+
+      - name: Pre Commit
+        run: uvx pre-commit run --all-files
+
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: tarioch/fava
+          # master is published as latest and as a snapshot (timestamp and commit), version tags as the version
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value={{date 'YYYYMMDDHHmmss'}}{{sha}},enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+
+      - name: Build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          load: true
+          tags: |
+            fava:ci
+            ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Smoke test
+        run: |
+          docker run --rm fava:ci pip check
+          docker run --rm fava:ci python -c "import beanprice, beancount_reds_plugins, fava_dashboards, smart_importer, tariochbctools"
+
+          # fava serves a ledger and stops on SIGTERM without being killed after the timeout (exit code 137)
+          echo '2024-01-01 open Assets:Bank' > "$RUNNER_TEMP/smoke.beancount"
+          docker run --detach --name fava --publish 5000:5000 --volume "$RUNNER_TEMP:/ledger:ro" \
+            --env BEANCOUNT_INPUT_FILE=/ledger/smoke.beancount fava:ci
+          # the port is published before fava listens, so connections are refused or reset at first
+          curl --fail --silent --show-error --location --retry 10 --retry-all-errors --retry-delay 2 \
+            --output /dev/null http://localhost:5000/ || { docker logs fava; exit 1; }
+          docker stop --time 5 fava
+          test "$(docker inspect --format '{{.State.ExitCode}}' fava)" != 137
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Publish Release to Registry
-        uses: elgohr/Publish-Docker-Github-Action@v5
-        if: contains(github.ref, 'refs/tags/v')
-        with:
-          name: tarioch/fava
-          tagging: true
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Publish
+        if: github.event_name == 'push'
+        run: docker push --all-tags tarioch/fava
