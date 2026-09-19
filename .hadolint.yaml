@@ -1,0 +1,3 @@
+ignored:
+  # the apt packages come from the pinned base image release, not from pinned package versions
+  - DL3008
