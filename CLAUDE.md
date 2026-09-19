@@ -9,8 +9,10 @@
   untracked files.
 - Never put real financial data, credentials or personal details into the repository, commits, pull requests or issues.
   Ledgers used for testing the image are synthetic.
-- Build the image and run it before opening a pull request that changes the `Dockerfile` or `requirements.txt`, and say
-  in the description what was tested. Compare `pip freeze` of the image before and after to see what a change really
+- Build the image and run it before opening a pull request that changes the `Dockerfile` or the dependencies, and say
+  in the description what was tested. Compare `uv pip freeze` of the image before and after to see what a change really
   does.
+- When dependencies change, regenerate `uv.lock` with the uv version of the pre-commit hook and check that the lock diff
+  only contains what you intended.
 - Keep pull request descriptions factual: the problem, the change, how it was verified (including what could not be
   verified before merging, e.g. the publishing steps).

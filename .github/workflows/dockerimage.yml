@@ -64,7 +64,7 @@ jobs:
 
       - name: Smoke test
         run: |
-          docker run --rm fava:ci pip check
+          docker run --rm fava:ci uv pip check
           docker run --rm fava:ci python -c "import beanprice, beancount_reds_plugins, fava_dashboards, smart_importer, tariochbctools"
 
           # fava serves a ledger and stops on SIGTERM without being killed after the timeout (exit code 137)
