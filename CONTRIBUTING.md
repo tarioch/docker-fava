@@ -7,7 +7,7 @@ smart-importer, tariochbctools and a few other Beancount tools, see the [README]
 
 | Path | Content |
 |---|---|
-| `Dockerfile` | the image, based on the `uv` image of Astral (uv with Python 3.14 on Debian trixie) |
+| `Dockerfile` | the image, based on the `uv` image of Astral (uv with Python 3.14 on slim Debian trixie) |
 | `pyproject.toml` | the direct python dependencies (the project itself is not a package) |
 | `uv.lock` | the locked versions of all python packages in the image, with hashes |
 | `.github/workflows/dockerimage.yml` | lint, build, smoke test and publishing |
@@ -37,9 +37,12 @@ Things that catch people out:
 
 - Fava runs behind `tini` (the entrypoint). Without an init process fava is PID 1 and ignores SIGTERM, so the container
   is only stopped by the kill timeout (30 seconds in a Kubernetes pod).
-- The base image is `ghcr.io/astral-sh/uv:<uv version>-python3.14-trixie`, pinned with a digest. The Python patch
-  version comes with the image, Dependabot updates the uv version and the digest together. Moving to a new Python minor
-  version is a manual change (base image tag and `requires-python`).
+- The base image is `ghcr.io/astral-sh/uv:<uv version>-python3.14-trixie-slim`, pinned with a digest. The Python
+  patch version comes with the image, Dependabot updates the uv version and the digest together. Moving to a new Python
+  minor version is a manual change (base image tag and `requires-python`).
+- The slim image has no compiler, `git`, `curl` or `ps`. A dependency that has no wheel and needs a C compiler fails the
+  build (the CI of the Dependabot PR shows it), install the compiler in a separate build stage then, not in the final
+  image.
 - The packages are installed with `uv sync --locked` into `/opt/venv`, which is first on the `PATH`. The working
   directory stays `/`, so relative paths in `BEANCOUNT_INPUT_FILE` resolve as before. The virtual environment has no
   `pip`, use `uv pip` (`VIRTUAL_ENV` is set).
