@@ -7,8 +7,9 @@ smart-importer, tariochbctools and a few other Beancount tools, see the [README]
 
 | Path | Content |
 |---|---|
-| `Dockerfile` | the image, based on the official `python` image |
-| `requirements.txt` | the python packages that are installed, all with a pinned version |
+| `Dockerfile` | the image, based on the `uv` image of Astral (uv with Python 3.14 on Debian trixie) |
+| `pyproject.toml` | the direct python dependencies (the project itself is not a package) |
+| `uv.lock` | the locked versions of all python packages in the image, with hashes |
 | `.github/workflows/dockerimage.yml` | lint, build, smoke test and publishing |
 
 ## Checks
@@ -36,18 +37,26 @@ Things that catch people out:
 
 - Fava runs behind `tini` (the entrypoint). Without an init process fava is PID 1 and ignores SIGTERM, so the container
   is only stopped by the kill timeout (30 seconds in a Kubernetes pod).
-- The base image is pinned with a digest (`python:<version>@sha256:…`), Dependabot updates version and digest together.
+- The base image is `ghcr.io/astral-sh/uv:<uv version>-python3.14-trixie`, pinned with a digest. The Python patch
+  version comes with the image, Dependabot updates the uv version and the digest together. Moving to a new Python minor
+  version is a manual change (base image tag and `requires-python`).
+- The packages are installed with `uv sync --locked` into `/opt/venv`, which is first on the `PATH`. The working
+  directory stays `/`, so relative paths in `BEANCOUNT_INPUT_FILE` resolve as before. The virtual environment has no
+  `pip`, use `uv pip` (`VIRTUAL_ENV` is set).
 - Packages installed with apt: keep `--no-install-recommends` and remove `/var/lib/apt/lists` in the same layer.
   Versions are not pinned (hadolint `DL3008` is ignored in `.hadolint.yaml`), they come from the base image release.
 
 ## Dependencies
 
-- Every package in `requirements.txt` has a pinned version and comes from PyPI. Do not install from git branches, the
-  build is then not reproducible and Dependabot cannot update it.
-- Only direct dependencies are listed, their dependencies are resolved when the image is built.
-- Dependabot (`.github/dependabot.yml`) opens grouped PRs for minor and patch updates of the python packages and the
-  base image weekly and for GitHub Actions monthly. Major updates come as separate PRs. New releases wait 7 days
-  (cooldown), security updates do not.
+- Direct dependencies are listed in `pyproject.toml` without versions, `uv.lock` (committed) fixes the version of every
+  package, direct or transitive, so an image build only contains what is in the lock. All packages come from PyPI. Do not
+  install from git branches, the build is then not reproducible and Dependabot cannot update it.
+- Regenerate the lock with the uv version of the `uv-lock` pre-commit hook (`rev` in `.pre-commit-config.yaml`), a
+  different uv version rewrites unrelated parts of the file: `uvx --from uv==<rev> uv lock` (add `--upgrade-package
+  <name>` to update one package). Keep the hook `rev` at the uv version of the base image when Dependabot bumps it.
+- Dependabot (`.github/dependabot.yml`) opens grouped PRs for minor and patch updates of the python packages (the diff
+  of `uv.lock` shows what moves, transitive packages included) and the base image weekly and for GitHub Actions monthly.
+  Major updates come as separate PRs. New releases wait 7 days (cooldown), security updates do not.
 
 ## Git and pull requests
 
