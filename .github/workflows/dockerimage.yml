@@ -71,8 +71,9 @@ jobs:
           echo '2024-01-01 open Assets:Bank' > "$RUNNER_TEMP/smoke.beancount"
           docker run --detach --name fava --publish 5000:5000 --volume "$RUNNER_TEMP:/ledger:ro" \
             --env BEANCOUNT_INPUT_FILE=/ledger/smoke.beancount fava:ci
-          curl --fail --silent --show-error --location --retry 10 --retry-connrefused --retry-delay 2 \
-            --output /dev/null http://localhost:5000/
+          # the port is published before fava listens, so connections are refused or reset at first
+          curl --fail --silent --show-error --location --retry 10 --retry-all-errors --retry-delay 2 \
+            --output /dev/null http://localhost:5000/ || { docker logs fava; exit 1; }
           docker stop --time 5 fava
           test "$(docker inspect --format '{{.State.ExitCode}}' fava)" != 137
 
