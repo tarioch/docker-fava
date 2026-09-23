@@ -40,9 +40,8 @@ Things that catch people out:
 - The base image is `ghcr.io/astral-sh/uv:<uv version>-python3.14-trixie-slim`, pinned with a digest. The Python
   patch version comes with the image, Dependabot updates the uv version and the digest together. Moving to a new Python
   minor version is a manual change (base image tag and `requires-python`).
-- `git` is installed for users who point `BEANCOUNT_INPUT_FILE` at a ledger kept in a repository (e.g. cloned by an
-  init container). It only gives the `git` binary and the HTTPS/libcurl transport, no `openssh-client`, so cloning over
-  `ssh://` needs that added too.
+- `git` and `openssh-client` are installed for users who point `BEANCOUNT_INPUT_FILE` at a ledger kept in a repository
+  (e.g. cloned by an init container), over `https://` or `ssh://`.
 - The slim image otherwise has no compiler, `curl` or `ps`. A dependency that has no wheel and needs a C compiler fails
   the build (the CI of the Dependabot PR shows it), install the compiler in a separate build stage then, not in the
   final image.
