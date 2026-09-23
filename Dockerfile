@@ -14,7 +14,7 @@ ENV BEANCOUNT_INPUT_FILE="" \
     PATH="/opt/venv/bin:$PATH"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends tini \
+    && apt-get install -y --no-install-recommends git tini \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml uv.lock /project/
