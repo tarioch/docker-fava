@@ -11,6 +11,7 @@ dependencies = [
     "beanprice",
     "fava",
     "fava-dashboards",
+    "fava-nl2bql",
     "smart-importer",
     "tariochbctools",
 ]
