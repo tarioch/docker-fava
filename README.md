@@ -9,6 +9,7 @@ Docker image with [fava](https://github.com/beancount/fava) and the tools around
 - [tariochbctools](https://github.com/tarioch/beancounttools)
 - [beancount-reds-plugins](https://github.com/redstreet/beancount_reds_plugins)
 - [fava-dashboards](https://github.com/andreasgerstmayr/fava-dashboards)
+- [fava-nl2bql](https://github.com/tarioch/fava-nl2bql)
 - [beanprice](https://github.com/beancount/beanprice)
 
 The image is published as [`tarioch/fava`](https://hub.docker.com/r/tarioch/fava) on Docker Hub.
