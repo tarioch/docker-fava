@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.12.23-python3.14-trixie-slim@sha256:8e88a074b0969bdc461f681727238e109438d70771828909f9ef19cfcc96c43a
+FROM ghcr.io/astral-sh/uv:0.13.1-python3.14-trixie-slim@sha256:112f89760bd54b63c84d140151ea5f3d849278e54f6f939f2c40a57f3e33d895
 
 # The packages are installed into a virtual environment outside of the working directory (/), which stays
 # as it was for relative paths in BEANCOUNT_INPUT_FILE.
