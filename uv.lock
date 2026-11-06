@@ -546,15 +546,15 @@ wheels = [
 
 [[package]]
 name = "fava-nl2bql"
-version = "0.3.0"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fava" },
     { name = "openai" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/61/95/c773ca31d883250c67b4853600063e195aab6a910ca4c6c5d2211fcd0f98/fava_nl2bql-0.3.0.tar.gz", hash = "sha256:ed3fda9df6ef5da6250cacf0d0879bafc9da8ba46ff7a7a48a92aadfa3bf0c9d", size = 733419, upload-time = "2026-09-30T18:26:23.214Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/bb/55bb9fb89cc5e7fac0e36e1342d60944a5fffe4e41f42409acfa27debb81/fava_nl2bql-0.4.0.tar.gz", hash = "sha256:32d6623f62abdedbff71c84873bff9a62d12f1f560b047cd96f8c222d29a5321", size = 670538, upload-time = "2026-11-06T19:16:19.189Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a9/21/fc9f99fd78c0431f5c41c4a760324bb29544f109ad749346e7d6218d693d/fava_nl2bql-0.3.0-py3-none-any.whl", hash = "sha256:f8d2b16cb524cb16db6bb87e07038998b7906747ae8ed2025bef6bca977f3aa7", size = 6535, upload-time = "2026-09-30T18:26:22.29Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/08/84799f43f0388233ac6518bca20ce1364e27d61676d64e43cadb22634d2c/fava_nl2bql-0.4.0-py3-none-any.whl", hash = "sha256:47e915af5bfe2a486304819484cde7a2d97e3b754cb97706e089b90a50b48999", size = 6706, upload-time = "2026-11-06T19:16:18.256Z" },
 ]
 
 [[package]]
