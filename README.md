@@ -1,6 +1,6 @@
 # docker-fava
 
-[![Docker Image CI](https://github.com/tarioch/docker-fava/actions/workflows/dockerimage.yml/badge.svg?branch=master)](https://github.com/tarioch/docker-fava/actions/workflows/dockerimage.yml)
+[![Docker Image CI](https://github.com/tarioch/docker-fava/actions/workflows/dockerimage.yml/badge.svg?branch=main)](https://github.com/tarioch/docker-fava/actions/workflows/dockerimage.yml)
 
 Docker image with [fava](https://github.com/beancount/fava) and the tools around it that are used with
 [Beancount](https://beancount.github.io/):
@@ -36,8 +36,8 @@ Any other command can be run in the image by overriding the command, e.g. `docke
 
 | Tag | Content |
 |---|---|
-| `latest` | the latest build of `master` (or of a release) |
-| `<timestamp><commit>` | snapshot of a build of `master`, e.g. `20260919001953227b518` |
+| `latest` | the latest build of `main` (or of a release) |
+| `<timestamp><commit>` | snapshot of a build of `main`, e.g. `20260919001953227b518` |
 | `x.y.z` | release |
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how the image is built and released.
