@@ -66,7 +66,7 @@ Things that catch people out:
 ## Git and pull requests
 
 - Branch off `main`, named `feature/…`, `bugfix/…` or `chore/…` (snake_case after the prefix). The prefix labels the PR
-  (`.github/pr-labeler.yml`), and the label decides the category in the release notes (the shared
+  (`.github/pr-labeler.yml`, its `Label check` fails without one of these labels), and the label decides the category in the release notes (the shared
   `release-drafter.yml` of [tarioch/.github](https://github.com/tarioch/.github)).
 - Commit subjects are imperative and start with a capital letter ("Install fava-dashboards and beanprice from PyPI"),
   the body explains why.
@@ -74,7 +74,7 @@ Things that catch people out:
 
 ## CI and releases
 
-`.github/workflows/dockerimage.yml` runs `lint` and `build` for every pull request and for pushes to `main` and to
+`.github/workflows/dockerimage.yml` runs `lint`, `build` and `ci-ok` (fails unless both succeeded, the one check to require) for every pull request and for pushes to `main` and to
 version tags. Workflows use the least permissions they need, and every action is pinned to a commit SHA (Dependabot keeps
 the pins current, zizmor fails for unpinned actions or broad permissions).
 

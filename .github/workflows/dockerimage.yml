@@ -87,3 +87,23 @@ jobs:
       - name: Publish
         if: github.event_name == 'push'
         run: docker push --all-tags tarioch/fava
+
+  # one check to require on main, so changing the jobs needs no settings change
+  ci-ok:
+    name: CI ok
+    needs: [lint, build]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check that all jobs succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for result in $RESULTS; do
+            if [ "$result" != success ]; then
+              echo "not all jobs succeeded: $RESULTS"
+              exit 1
+            fi
+          done
