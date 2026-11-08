@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [master]
+    branches: [main, master]
     tags: ["v*"]
   pull_request:
 
@@ -46,7 +46,7 @@ jobs:
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: tarioch/fava
-          # master is published as latest and as a snapshot (timestamp and commit), version tags as the version
+          # the default branch is published as latest and as a snapshot (timestamp and commit), version tags as the version
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value={{date 'YYYYMMDDHHmmss'}}{{sha}},enable={{is_default_branch}}

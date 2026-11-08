@@ -65,22 +65,22 @@ Things that catch people out:
 
 ## Git and pull requests
 
-- Branch off `master`, named `feature/…`, `bugfix/…` or `chore/…` (snake_case after the prefix). The prefix labels the PR
+- Branch off `main`, named `feature/…`, `bugfix/…` or `chore/…` (snake_case after the prefix). The prefix labels the PR
   (`.github/pr-labeler.yml`), and the label decides the category in the release notes (the shared
   `release-drafter.yml` of [tarioch/.github](https://github.com/tarioch/.github)).
 - Commit subjects are imperative and start with a capital letter ("Install fava-dashboards and beanprice from PyPI"),
   the body explains why.
-- Changes go through pull requests into `master` and are merged with a merge commit.
+- Changes go through pull requests into `main` and are merged with a merge commit.
 
 ## CI and releases
 
-`.github/workflows/dockerimage.yml` runs `lint` and `build` for every pull request and for pushes to `master` and to
+`.github/workflows/dockerimage.yml` runs `lint` and `build` for every pull request and for pushes to `main` and to
 version tags. Workflows use the least permissions they need, and every action is pinned to a commit SHA (Dependabot keeps
 the pins current, zizmor fails for unpinned actions or broad permissions).
 
 - The `build` job builds the image once, runs the smoke test against it and, for pushes only, pushes exactly that image.
   Pull requests never log in to Docker Hub.
-- Every push to `master` publishes `latest` and a snapshot tag (`<timestamp><commit>`).
+- Every push to `main` publishes `latest` and a snapshot tag (`<timestamp><commit>`).
 - Release notes are drafted by release-drafter. Publishing the draft creates the tag `vX.Y.Z`, which publishes the image
   as `X.Y.Z` (and `latest`).
 - Publishing needs the repository secrets `DOCKER_USERNAME` and `DOCKER_PASSWORD` (Docker Hub has no trusted
