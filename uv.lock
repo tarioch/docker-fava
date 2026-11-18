@@ -1567,7 +1567,7 @@ wheels = [
 
 [[package]]
 name = "tariochbctools"
-version = "1.7.1"
+version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "awardwallet" },
@@ -1588,9 +1588,9 @@ dependencies = [
     { name = "undictify" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/31/6d9c2639d0d46bc352a3e64722655976d240d9a83ab5b32722b2ce6d3f60/tariochbctools-1.7.1.tar.gz", hash = "sha256:6a852d35f3dd419b6297fff3da255379641b3af6c6220d7fe7dbc843d7db8731", size = 186126, upload-time = "2026-11-08T14:09:53.897Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/3f/890f835ed3867dfbf3e2a6674c1a5bfafa59c182d7690da71b1c77d67cbc/tariochbctools-1.8.0.tar.gz", hash = "sha256:93acc13fa090919b9a03e32142beccec21a003dccc256fafa416d4089d021e16", size = 168045, upload-time = "2026-11-18T10:08:04.672Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/20/0c263ed8fefca49baaaa7fc88d78ace66fcec6b45a3709df29f992b8f241/tariochbctools-1.7.1-py3-none-any.whl", hash = "sha256:753397cbe002bc4124befa38336f5ea05ec6a4384c0ab4a532d4116dac55f2fa", size = 47324, upload-time = "2026-11-08T14:09:52.778Z" },
+    { url = "https://files.pythonhosted.org/packages/09/a2/5ee8a3a3cdec2466e5fb43cf4f4f4a95025c6edb027155cf588349062dc3/tariochbctools-1.8.0-py3-none-any.whl", hash = "sha256:63ebf2264029bce6dcea1ffc6c72824134cbc5b101ff8fce5b51b27d11e2f8d1", size = 47619, upload-time = "2026-11-18T10:08:03.381Z" },
 ]
 
 [[package]]
