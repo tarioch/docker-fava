@@ -1,0 +1,99 @@
+name: Bump tariochbctools
+
+on:
+  repository_dispatch:
+    types: [tariochbctools-released]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "tariochbctools version, e.g. 1.8.0"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  bump:
+    name: Bump tariochbctools
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Check the version
+        id: version
+        env:
+          VERSION: ${{ github.event.client_payload.version || inputs.version }}
+        run: |
+          VERSION="${VERSION#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+            echo "::error::not a release version: $VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Wait for the release on PyPI
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          for _ in $(seq 60); do
+            if curl --fail --silent --output /dev/null "https://pypi.org/pypi/tariochbctools/$VERSION/json"; then
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::tariochbctools $VERSION is not on PyPI after 30 minutes"
+          exit 1
+
+      - name: Update uv.lock
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          image="$(sed -n 's/^FROM //p' Dockerfile)"
+          docker run --rm --user "$(id -u):$(id -g)" --env UV_NO_CACHE=1 --env HOME=/tmp \
+            --volume "$PWD:/project" --workdir /project "$image" \
+            uv lock --upgrade-package "tariochbctools==$VERSION"
+          git diff --stat
+
+      - name: Open the pull request
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ secrets.DOCKER_FAVA_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if git diff --quiet uv.lock; then
+            echo "uv.lock already contains tariochbctools $VERSION"
+            exit 0
+          fi
+
+          branch="chore/bump_tariochbctools_${VERSION//./_}"
+          title="Bump tariochbctools to $VERSION"
+          git switch --create "$branch"
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet --message "$title" \
+            --message "tariochbctools $VERSION is released, the image gets it without waiting for the cooldown of Dependabot." \
+            uv.lock
+
+          gh auth setup-git
+          git push --force "https://github.com/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/$branch"
+
+          if [ -n "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            echo "the pull request for $branch is already open, the branch is updated"
+            exit 0
+          fi
+          gh pr create --base main --head "$branch" --title "$title" --body "$(cat <<EOF
+          tariochbctools $VERSION is released ($GITHUB_SERVER_URL/tarioch/beancounttools/releases/tag/v$VERSION).
+
+          \`uv.lock\`: \`uv lock --upgrade-package tariochbctools==$VERSION\` with the uv of the base image, run by the
+          [Bump tariochbctools]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) workflow.
+          EOF
+          )"

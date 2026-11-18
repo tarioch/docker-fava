@@ -62,6 +62,12 @@ Things that catch people out:
 - Dependabot (`.github/dependabot.yml`) opens grouped PRs for minor and patch updates of the python packages (the diff
   of `uv.lock` shows what moves, transitive packages included) and the base image weekly and for GitHub Actions monthly.
   Major updates come as separate PRs. New releases wait 7 days (cooldown), security updates do not.
+- A release of tariochbctools does not wait for the cooldown: its release sends a `repository_dispatch`, and
+  `.github/workflows/bump-tariochbctools.yml` waits until the version is on PyPI, runs `uv lock --upgrade-package
+  tariochbctools==<version>` with the uv of the base image and opens a pull request from
+  `chore/bump_tariochbctools_<version>`. It can also be started by hand (Run workflow, with the version). The branch is
+  pushed and the pull request opened with the secret `DOCKER_FAVA_TOKEN`, a pull request opened with the `GITHUB_TOKEN`
+  would not run the checks.
 
 ## Git and pull requests
 
