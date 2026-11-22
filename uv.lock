@@ -1231,6 +1231,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pypdf"
+version = "7.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/5f/f41984a8150ec37c6ee50fa6fa1868d065337b65ba510a155848b2ce0b62/pypdf-7.1.1.tar.gz", hash = "sha256:2eff4e2fc5fb22a6d6711e6f1166cdc9ab5765d90cd0d77dfea3f4aa91a27b1d", size = 7221452, upload-time = "2026-11-18T11:51:08.608Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5b/ef/11ed995bd10a1632f7fea3da38ae8d42bc3ccc5b9969fe04d8620c844408/pypdf-7.1.1-py3-none-any.whl", hash = "sha256:04c5680d4b4cfa04ab505b09393fc949860c34a4dad6565284d11a2f5c3ce8b1", size = 421026, upload-time = "2026-11-18T11:51:06.563Z" },
+]
+
+[[package]]
 name = "pypdfium2"
 version = "5.13.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1567,7 +1576,7 @@ wheels = [
 
 [[package]]
 name = "tariochbctools"
-version = "1.9.0"
+version = "1.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "awardwallet" },
@@ -1581,6 +1590,7 @@ dependencies = [
     { name = "imap-tools" },
     { name = "mt-940" },
     { name = "pandas" },
+    { name = "pypdf" },
     { name = "python-dateutil" },
     { name = "pyyaml" },
     { name = "requests" },
@@ -1588,9 +1598,9 @@ dependencies = [
     { name = "undictify" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/79/27/57605d7b5562d0dc2f00d7fd18f0e651767ec1a7550dd8127748d930fbf6/tariochbctools-1.9.0.tar.gz", hash = "sha256:b930b922c2a91682083542d8ea41a407bdd6290c191a11d52effcfadfba04de5", size = 173262, upload-time = "2026-11-20T22:39:29.269Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/d0/0ac35e22044a17fc545a994510c4edec09c3376228f93937a8181f6984ed/tariochbctools-1.9.1.tar.gz", hash = "sha256:77cacbdcdc6d10fe7729437350707c19ed6d3f7abcbadbad623351ca8690116d", size = 173978, upload-time = "2026-11-22T11:02:55.331Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/41/b21c96d9d8c2d66c3fbeed472f300c761e19a886705db43788d540bd7e0b/tariochbctools-1.9.0-py3-none-any.whl", hash = "sha256:26d06cbfc0979c9d4917bbc85a025d36d9bb0712d063340cfb49af39b2f83239", size = 50562, upload-time = "2026-11-20T22:39:28.239Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/b3/869a88ea705d519171d4c11b37a4c66a91a6bb844a7efacde14a34ba4b75/tariochbctools-1.9.1-py3-none-any.whl", hash = "sha256:ba1139108e5ed65775a3419926f30ea08c26b0cb17d63773705e63a43b0f4790", size = 51117, upload-time = "2026-11-22T11:02:54.373Z" },
 ]
 
 [[package]]
